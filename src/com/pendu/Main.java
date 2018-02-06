@@ -1,8 +1,8 @@
 package com.pendu;
 
-import java.util.Scanner;
-
 import com.pendu.model.PenduModel;
+import com.pendu.observer.Observable;
+import com.pendu.vue.Fenetre;
 
 /**
  * <b>Main est la classe permettant de lancer l'application</b>
@@ -13,18 +13,9 @@ import com.pendu.model.PenduModel;
 public class Main {
 
 	public static void main(String[] args) {
-		PenduModel model = new PenduModel();
-
-		Scanner sc = new Scanner(System.in);
-		char lettre = 'A';
-
-		while (lettre!='é') {
-
-			lettre = (sc.nextLine()).charAt(0);
-			model.proposerLettre(lettre);
-		}
-		
-		sc.close();
+		Observable model = new PenduModel();
+		@SuppressWarnings("unused")
+		Fenetre fen =new Fenetre(model);
 
 	}
 

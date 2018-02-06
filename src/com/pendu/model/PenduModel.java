@@ -32,11 +32,11 @@ public class PenduModel implements Observable {
 	/**
 	 * nombre d'erreur maximum autorisé
 	 */
-	private byte nbErreurMax = 8;
+	private byte nbErreurMax = 7;
 	/**
-	 * tableau du score en fonction de nombre d'erreur
+	 * tableau des score en fonction de nombre d'erreur
 	 */
-	private int score[] = { 100, 50, 35, 25, 15, 10, 5, 0 };
+	private int score[] = { 100, 50, 35, 25, 15, 10, 5 };
 
 	/**
 	 * Tableau des meilleurs scores
@@ -69,14 +69,11 @@ public class PenduModel implements Observable {
 	 */
 	private int nbMotsTrouves;
 
-	private String pseudo = "";
-
 	/**
 	 * Constructeur
 	 */
 	public PenduModel() {
 		initTableauScore();
-		initpartie();
 	}
 
 	/**
@@ -105,18 +102,12 @@ public class PenduModel implements Observable {
 				tableauScore[2][i] = "0";
 			}
 		}
-
-		System.out.println("tableau de score :");
-		for (int i = 0; i < 10; i++) {
-			System.out.println(tableauScore[0][i] + " - " + tableauScore[1][i] + " - " + tableauScore[2][i]);
-		}
-
 	}
 
 	/**
 	 * Initialise une partie
 	 */
-	private void initpartie() {
+	public void initpartie() {
 		this.points = 0;
 		this.nbMotsTrouves = 0;
 		initmanche();
@@ -132,7 +123,11 @@ public class PenduModel implements Observable {
 		choisirMot();
 		this.motTrouve = "";
 		for (int i = 0; i < this.mot.length(); i++) {
-			this.motTrouve = new String(this.motTrouve + "#");
+			if (this.mot.charAt(i) == '-') {
+				this.motTrouve = new String(this.motTrouve + "-");
+			} else {
+				this.motTrouve = new String(this.motTrouve + "#");
+			}
 		}
 	}
 
@@ -152,7 +147,6 @@ public class PenduModel implements Observable {
 				br.readLine();
 			}
 			mot = (br.readLine()).toUpperCase();
-			System.out.println("Mot : " + mot);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		} finally {
@@ -162,7 +156,7 @@ public class PenduModel implements Observable {
 				e.printStackTrace();
 			}
 		}
-
+		System.out.println(mot);
 	}
 
 	/**
@@ -172,64 +166,121 @@ public class PenduModel implements Observable {
 	 *            lettre proposé
 	 */
 	public void proposerLettre(char lettre) {
-		CharSequence l = "" + lettre;
-		if (mot.contains(l)) {
-			String nouveauMotTrouve = "";
-			for (int i = 0; i < mot.length(); i++) {
-				if (mot.charAt(i) == lettre) {
-					nouveauMotTrouve += lettre;
-				} else if (motTrouve.charAt(i) != '#') {
-					nouveauMotTrouve += motTrouve.charAt(i);
-				} else {
-					nouveauMotTrouve += "#";
-				}
-			}
-			motTrouve = nouveauMotTrouve;
-			System.out.println(lettre + " est une bonne lettre, le mot est : " + motTrouve);
-		} else {
-			nbErreur++;
-			if (nbErreur == nbErreurMax) {
-				finPartie();
-			}
-			System.out.println(lettre + " est une mauvaise lettre, le mot est : " + motTrouve);
+
+		switch (lettre) {
+		case 'A':
+			CharSequence l1[] = { "A", "à".toUpperCase(), "Ä", "Â" };
+			this.testLettre(l1);
+			break;
+		case 'E':
+			CharSequence l2[] = { "E", "é".toUpperCase(), "è".toUpperCase(), "Ë", "Ê" };
+			this.testLettre(l2);
+			break;
+		case 'I':
+			CharSequence l3[] = { "I", "Ï", "Î" };
+			this.testLettre(l3);
+			break;
+		case 'O':
+			CharSequence l4[] = { "O", "Ö", "Ô" };
+			this.testLettre(l4);
+			break;
+		case 'U':
+			CharSequence l5[] = { "U", "ù".toUpperCase(), "Ü", "Û" };
+			this.testLettre(l5);
+			break;
+		case 'C':
+			CharSequence l6[] = { "C", "ç".toUpperCase() };
+			this.testLettre(l6);
+			break;
+		default:
+			CharSequence l7[] = { "" + lettre };
+			this.testLettre(l7);
+			break;
 		}
 
 		if (mot.equalsIgnoreCase(motTrouve)) {
 			finManche();
+		} else {
+			if (nbErreur == nbErreurMax) {
+				finPartie();
+			} else {
+				char lettrePropose2[] = new char[lettrePropose.length + 1];
+				for (int i = 0; i < lettrePropose.length; i++) {
+					lettrePropose2[i] = lettrePropose[i];
+				}
+				lettrePropose2[lettrePropose2.length - 1] = lettre;
+				lettrePropose = lettrePropose2;
+
+				this.updateObservateur();
+			}
+
+		}
+	}
+
+	private void testLettre(CharSequence l[]) {
+		boolean contien = false;
+		for (CharSequence c : l) {
+			if (mot.contains(c)) {
+				contien = true;
+				String nouveauMotTrouve = "";
+				for (int i = 0; i < mot.length(); i++) {
+					if (mot.charAt(i) == c.charAt(0)) {
+						nouveauMotTrouve += c.charAt(0);
+					} else {
+						nouveauMotTrouve += motTrouve.charAt(i);
+					}
+				}
+				motTrouve = nouveauMotTrouve;
+			}
 		}
 
-		this.updateObservateur();
+		if (!contien) {
+			nbErreur++;
+		}
+
 	}
 
 	/**
 	 * Actions lorsque le mot a été trouvé
 	 */
 	private void finManche() {
-		System.out.println("fin de manche");
 		this.nbMotsTrouves++;
 		points += score[this.nbErreur];
 
-		System.out.println("Points : " + this.points);
+		String m = mot;
+		this.updateObservateur();
+
 		this.initmanche();
+
+		for (Observateur obs : this.listObs)
+			obs.updateFinManche(m);
 	}
 
 	/**
 	 * Actions lorsque le mot n'a pas été trouvé
 	 */
 	private void finPartie() {
-		System.out.println("fin de la partie");
-		if (this.points > Integer.parseInt(this.tableauScore[1][9])) {
-			System.out.println("Ajouter le joueur dans le tableau");
+		String m = this.mot;
+		int p = this.points;
+		int n = this.nbMotsTrouves;
+		this.updateObservateur();
+
+		this.initpartie();
+
+		if (p > Integer.parseInt(this.tableauScore[1][9])) {
+			String pseudo = "";
+			for (Observateur obs : this.listObs) {
+				pseudo = obs.updateFinPartie(true, m, p, n);
+			}
+
 			String newTableauScore[][] = new String[3][10];
 			boolean in = false;
 			int i = 0;
 			while (!in) {
-				System.out.println("in = " + in);
-
-				if (this.points > Integer.parseInt(this.tableauScore[1][i])) {
-					newTableauScore[0][i] = this.pseudo;
-					newTableauScore[1][i] = "" + this.points;
-					newTableauScore[2][i] = "" + this.nbMotsTrouves;
+				if (p > Integer.parseInt(this.tableauScore[1][i])) {
+					newTableauScore[0][i] = pseudo;
+					newTableauScore[1][i] = "" + p;
+					newTableauScore[2][i] = "" + n;
 					in = true;
 				} else {
 					newTableauScore[0][i] = tableauScore[0][i];
@@ -242,16 +293,15 @@ public class PenduModel implements Observable {
 				newTableauScore[0][j] = tableauScore[0][j - 1];
 				newTableauScore[1][j] = tableauScore[1][j - 1];
 				newTableauScore[2][j] = tableauScore[2][j - 1];
-				System.out.println("2e boucle");
 			}
 			tableauScore = newTableauScore;
-			System.out.println("Nouveau tableau de score :");
-			for (int k = 0; k < 10; k++) {
-				System.out.println(tableauScore[0][k] + " - " + tableauScore[1][k] + " - " + tableauScore[2][k]);
-			}
+
 			enregistrerScore();
+		} else {
+			for (Observateur obs : this.listObs) {
+				obs.updateFinPartie(false, m, p, n);
+			}
 		}
-		this.initpartie();
 	}
 
 	/**
@@ -288,26 +338,38 @@ public class PenduModel implements Observable {
 
 	}
 
+	/**
+	 * Retourne le tableau des meilleurs scores
+	 * 
+	 * @return tableau des meilleurs scores
+	 */
 	public String[][] getTableauScore() {
 		return tableauScore;
 	}
 
-	public byte getNbErreur() {
-		return nbErreur;
-	}
-
+	/**
+	 * Retourne le nombre de mot trouvé de la partie en cours
+	 * 
+	 * @return nombre de mot trouvé de la partie en cours
+	 */
 	public String getMotTrouve() {
 		return motTrouve;
 	}
 
-	public char[] getLettrePropose() {
-		return lettrePropose;
-	}
-
+	/**
+	 * Retourne le score de la partie en cours
+	 * 
+	 * @return score de la partie en cours
+	 */
 	public int getPoints() {
 		return points;
 	}
 
+	/**
+	 * Retourne le nombre de mot trouvé de la partie en cours
+	 * 
+	 * @return nombre de mot trouvé de la partie en cours
+	 */
 	public int getNbMotsTrouves() {
 		return nbMotsTrouves;
 	}
@@ -331,6 +393,7 @@ public class PenduModel implements Observable {
 	 */
 	public void updateObservateur() {
 		for (Observateur obs : this.listObs)
-			obs.update();
+			obs.update(motTrouve, nbErreur, lettrePropose);
 	}
+
 }
