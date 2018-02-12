@@ -39,7 +39,7 @@ public class PanneauAccueil extends JPanel {
 		JTextArea texte = new JTextArea(
 				"Vous avez sept coups pour trouver le mot caché. Si vous réussissez, on recommence !\n"
 						+ "Plus vous trouvez de mots, plus votre score augmente. Alors, à vous de jouer !\n\n"
-						+ "Proverbe :\tPas vu, pas pris !\n" + "\tPris ! PENDU !");
+						+ "Proverbe : Pas vu, pas pris !\n" + "\tPris ! PENDU !");
 		texte.setFont(new Font("Arial", 0, 18));
 		texte.setEditable(false);
 

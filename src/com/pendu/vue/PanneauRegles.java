@@ -25,14 +25,14 @@ public class PanneauRegles extends JPanel{
 		JTextArea texte = new JTextArea("\n\n\nVous avez sept coups pour trouver le mot caché. Si vous réussissez, on recommence !\n" +
 				"Plus vous trouvez de mots, plus votre score augmente. Alors, à vous de jouer !\n" +
 				"\n\nCOMPTE DES POINTS :\n\n"
-				+ "\tMot trouvé sans erreur\t\t100 pts\n"
-				+ "\tMot trouvé avec une erreur\t\t  50 pts\n" +
-				"\tMot trouvé avec deux erreurs\t  35 pts\n"
-				+ "\tMot trouvé avec trois erreurs\t  25 pts\n"
-				+ "\tMot trouvé avec quatre erreurs\t  15 pts\n" +
-				"\tMot trouvé avec cinq erreurs\t  10 pts\n"
-				+ "\tMot trouvé avec six erreurs\t\t    5 pts\n\n\n" +
-				"Je vous souhaite bien du plaisir !\n"
+				+ "\tMot trouvé sans erreur - 100 pts\n"
+				+ "\tMot trouvé avec une erreur - 50 pts\n"
+				+ "\tMot trouvé avec deux erreurs - 35 pts\n"
+				+ "\tMot trouvé avec trois erreurs - 25 pts\n"
+				+ "\tMot trouvé avec quatre erreurs - 15 pts\n"
+				+ "\tMot trouvé avec cinq erreurs - 10 pts\n"
+				+ "\tMot trouvé avec six erreurs - 5 pts\n\n\n"
+				+ "Je vous souhaite bien du plaisir !\n"
 				+ "Si vous pensez pouvoir trouver un mot en un seul essai, c'est que vous croyez que le dictionnaire est petit.\n" +
 				"Or, pour votre information, il contient plus de 336 000 mots Bonne chance ! ;)");
 

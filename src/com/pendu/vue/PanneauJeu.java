@@ -181,7 +181,7 @@ public class PanneauJeu extends JPanel implements Observateur {
 	 */
 	public void updateFinManche(String mot) {
 
-		JOptionPane.showMessageDialog(null, "VICTOIRE! Bravo vous avez trouvez le mot : " + mot, "VICTOIRE",
+		JOptionPane.showMessageDialog(null, "VICTOIRE! Bravo vous avez trouvé le mot : " + mot, "VICTOIRE",
 				JOptionPane.INFORMATION_MESSAGE);
 
 		this.initPanneau();
@@ -197,12 +197,12 @@ public class PanneauJeu extends JPanel implements Observateur {
 		String pseudo = "";
 		if (!estDansLesMeilleursScores) {
 			JOptionPane.showMessageDialog(null,
-					"PERDU! Désolé vous n'avez pas trouvez le mot : " + mot
+					"PERDU! Désolé vous n'avez pas trouvé le mot : " + mot
 							+ ". Et vous n'êtes pas dans les meilleurs scores",
 					"PERDU", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			pseudo = JOptionPane.showInputDialog(null,
-					"PERDU! Désolé vous n'avez pas trouvez le mot : " + mot
+					"PERDU! Désolé vous n'avez pas trouvé le mot : " + mot
 							+ ".\nMais vous êtes dans les meilleurs scores! Merci d'indiquer votre Peudo!",
 					"PERDU", JOptionPane.QUESTION_MESSAGE);
 		}
